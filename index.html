@@ -462,21 +462,93 @@ function calcDiscount(p){
   return '';
 }
 
+function getVideoPlatform(url){
+  if(!isValidUrl(url)) return '';
+  try{
+    const u = new URL(url.trim());
+    const host = u.hostname.toLowerCase().replace(/^www\./,'');
+    if(host.includes('youtube.com') || host === 'youtu.be') return 'YouTube';
+    if(host.includes('vimeo.com')) return 'Vimeo';
+    if(host.includes('tiktok.com')) return 'TikTok';
+    if(host.includes('instagram.com')) return 'Instagram Reels';
+    if(host.includes('shopee.co.id') || host.includes('shopee.com')) return 'Shopee Video';
+    if(host.includes('facebook.com') || host.includes('fb.watch')) return 'Facebook';
+    if(/\.(mp4|webm|ogg)(?:$|\?)/i.test(u.pathname)) return 'Video File';
+    return 'External Video';
+  }catch(e){ return ''; }
+}
+
 function videoEmbedHtml(url, autoplay){
   if(!isValidUrl(url)) return '';
   let u;
   try{ u = new URL(url.trim()); }catch(e){ return ''; }
+
+  const host = u.hostname.toLowerCase().replace(/^www\./,'');
   const ap = autoplay ? '1' : '0';
-  if(u.hostname.includes('youtube.com') || u.hostname.includes('youtu.be')){
-    let videoId = u.hostname.includes('youtu.be') ? u.pathname.slice(1) : u.searchParams.get('v');
-    if(!videoId) return '';
-    return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=${ap}&mute=${ap}" title="Video" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  const platform = getVideoPlatform(url);
+
+  // YouTube / Shorts
+  if(host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtu.be'){
+    let videoId = '';
+    if(host === 'youtu.be') videoId = u.pathname.split('/').filter(Boolean)[0] || '';
+    else if(u.pathname.startsWith('/shorts/')) videoId = u.pathname.split('/')[2] || '';
+    else videoId = u.searchParams.get('v') || '';
+    if(!videoId) return externalVideoFallback(u.href, 'YouTube');
+    return `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=${ap}&mute=${ap}&rel=0" title="YouTube Video" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>`;
   }
-  if(u.hostname.includes('vimeo.com')){
+
+  // Vimeo
+  if(host === 'vimeo.com' || host === 'player.vimeo.com'){
     const id = u.pathname.split('/').filter(Boolean).pop();
-    return `<iframe src="https://player.vimeo.com/video/${id}?autoplay=${ap}" title="Video" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    if(!id || !/^\d+$/.test(id)) return externalVideoFallback(u.href, 'Vimeo');
+    return `<iframe src="https://player.vimeo.com/video/${encodeURIComponent(id)}?autoplay=${ap}" title="Vimeo Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   }
-  return `<video controls ${autoplay ? 'autoplay muted' : ''} src="${u.href}"></video>`;
+
+  // TikTok: supports normal video URLs and short vm.tiktok.com links.
+  if(host === 'tiktok.com' || host === 'm.tiktok.com'){
+    const match = u.pathname.match(/\/video\/(\d+)/i);
+    if(match){
+      return `<iframe src="https://www.tiktok.com/player/v1/${match[1]}?autoplay=${ap}&description=1" title="TikTok Video" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    return externalVideoFallback(u.href, 'TikTok');
+  }
+
+  if(host === 'vm.tiktok.com' || host === 'vt.tiktok.com'){
+    return externalVideoFallback(u.href, 'TikTok');
+  }
+
+  // Instagram Reels / posts. Instagram generally requires its own embed URL.
+  if(host === 'instagram.com' || host === 'instagram.co'){
+    const match = u.pathname.match(/\/(reel|reels|p)\/([^/?#]+)/i);
+    if(match){
+      return `<iframe src="https://www.instagram.com/${match[1].toLowerCase()}/${encodeURIComponent(match[2])}/embed/captioned/" title="Instagram Reel" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    }
+    return externalVideoFallback(u.href, 'Instagram');
+  }
+
+  // Facebook videos/reels.
+  if(host === 'facebook.com' || host === 'm.facebook.com' || host === 'fb.watch'){
+    return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(u.href)}&show_text=false&autoplay=${ap}" title="Facebook Video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  }
+
+  // IMPORTANT: only use HTML5 <video> for an actual video file.
+  // Do not send Shopee pages, CDN pages, or ordinary web URLs to <video>,
+  // because that produces the 0:00 black player shown in the screenshot.
+  if(/\.(mp4|webm|ogg|m4v)(?:$|[?#])/i.test(u.pathname)){
+    return `<video controls ${autoplay ? 'autoplay muted' : ''} playsinline preload="metadata" src="${escapeHtml(u.href)}"></video>`;
+  }
+
+  // Shopee Video and other marketplace/social links may explicitly block iframe playback.
+  // We cannot bypass that restriction from a normal HTML page, so open the original page instead.
+  return externalVideoFallback(u.href, platform || 'Video Promosi');
+}
+
+function externalVideoFallback(url, platform){
+  return `<div style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:24px;text-align:center;background:#111;color:#fff">
+    <div style="font-size:20px;font-weight:700">${escapeHtml(platform || 'Video Promosi')}</div>
+    <p style="margin:0;color:#bbb;max-width:560px;line-height:1.6">Video ini berada di platform yang tidak mengizinkan pemutaran langsung di dalam website. Buka video aslinya untuk menontonnya.</p>
+    <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Buka Video Asli ↗</a>
+  </div>`;
 }
 
 /* =====================================================================
