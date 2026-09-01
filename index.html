@@ -88,7 +88,7 @@
   .ig-link:hover{border-color:var(--accent);}
 
   /* =========================================================
-     HERO
+     HERO & POSTER 16:9
      ========================================================= */
   .hero{
     background:var(--navy);color:#fff;
@@ -124,12 +124,12 @@
   .hero-badges div{font-size:13px;color:#98A2B3;}
   .hero-badges strong{display:block;font-family:var(--font-display);font-size:22px;color:#fff;}
 
-  .hero-video{
-    border-radius:18px;overflow:hidden;background:#000;
-    aspect-ratio:16/10;border:1px solid #2A3546;box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  .hero-poster{
+    border-radius:18px;overflow:hidden;background:#1D2939;
+    aspect-ratio:16/9;border:1px solid #2A3546;box-shadow:0 20px 50px rgba(0,0,0,0.4);
   }
-  .hero-video iframe,.hero-video video{width:100%;height:100%;border:0;}
-  .hero-video .placeholder{
+  .hero-poster img{width:100%;height:100%;object-fit:cover;}
+  .hero-poster .placeholder{
     width:100%;height:100%;display:flex;align-items:center;justify-content:center;
     color:#667085;font-size:14px;flex-direction:column;gap:8px;
   }
@@ -235,7 +235,7 @@
   .footer-inner .logo{color:#fff;}
 
   /* =========================================================
-     MODAL (Video)
+     MODAL (Video Produk)
      ========================================================= */
   .modal-overlay{
     position:fixed;inset:0;background:rgba(16,24,40,0.8);display:none;
@@ -291,14 +291,14 @@
 </header>
 
 <!-- ============================================================
-     HERO + INTRO VIDEO
+     HERO + POSTER BANNER (16:9)
      ============================================================ -->
 <section class="hero">
   <div class="container hero-inner">
     <div>
       <span class="hero-eyebrow">Kurasi Gadget Terpercaya</span>
       <h1>Rekomendasi gadget yang benar-benar layak dibeli.</h1>
-      <p class="lead">IkbalAffiliate merangkum produk gadget & elektronik pilihan lengkap dengan ulasan singkat, video, dan harga promo terbaru — supaya kamu belanja lebih yakin.</p>
+      <p class="lead">IkbalAffiliate merangkum produk gadget & elektronik pilihan lengkap dengan ulasan singkat, video demo, dan harga promo terbaru — supaya kamu belanja lebih yakin.</p>
       <div class="hero-cta">
         <a href="#produk" class="btn btn-primary">Lihat Semua Produk</a>
         <a href="#about" class="btn btn-ghost">Tentang Kami</a>
@@ -309,8 +309,8 @@
         <div><strong>100%</strong>Link affiliate resmi</div>
       </div>
     </div>
-    <div class="hero-video" id="heroVideoBox">
-      <div class="placeholder">Memuat video perkenalan…</div>
+    <div class="hero-poster" id="heroPosterBox">
+      <div class="placeholder">Memuat poster banner…</div>
     </div>
   </div>
 </section>
@@ -321,7 +321,6 @@
 <div class="filter-bar" id="filterBar">
   <div class="filter-inner" id="categoryChips">
     <button class="chip active" data-cat="__all">Semua</button>
-    <!-- kategori lain diisi otomatis lewat JS -->
   </div>
 </div>
 
@@ -338,7 +337,7 @@
       <span class="result-count" id="resultCount"></span>
     </div>
     <div class="product-grid" id="productGrid">
-      <!-- skeleton / produk / pesan error dirender lewat JS -->
+      <!-- dirender lewat JS -->
     </div>
   </div>
 </section>
@@ -389,34 +388,24 @@
 <script>
 /* =====================================================================
    KONFIGURASI
-   ---------------------------------------------------------------------
-   1. Buat Google Sheet dari template (lihat panduan yang diberikan).
-   2. Deploy Google Apps Script sebagai Web App (Execute as: Me,
-      Who has access: Anyone).
-   3. Tempel URL hasil deploy (diakhiri /exec) ke variabel API_URL di
-      bawah ini.
-   Jika API_URL dikosongkan, situs akan menampilkan DATA DEMO bawaan
-   supaya tampilan tetap menarik sebelum Google Sheets terhubung.
    ===================================================================== */
 const CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbwxCWQD_8BNM51ne658suedajcmvI9-A21JaYno-yyW64WN0Jh2nry2pODkYRDJPCmTkw/exec' // <-- contoh: 'https://script.google.com/macros/s/XXXXXXXX/exec'
+  API_URL: 'https://script.google.com/macros/s/AKfycbwxCWQD_8BNM51ne658suedajcmvI9-A21JaYno-yyW64WN0Jh2nry2pODkYRDJPCmTkw/exec'
 };
 
-// Identitas brand DIKUNCI sesuai ketentuan — tidak diambil dari Sheets
-// supaya nama website & CEO selalu konsisten.
 const BRAND = {
   websiteName: 'IkbalAffiliate',
   ceoName: 'Ikbal Maulana'
 };
 
 /* =====================================================================
-   DATA DEMO (dipakai hanya jika API_URL kosong / gagal dimuat)
+   DATA DEMO
    ===================================================================== */
 const DEMO_SETTINGS = {
-  'Instagram Name': '@IkbalAffiliate',
-  'Instagram URL': 'https://instagram.com/ikbalaffiliate',
-  'Intro Video URL': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  'About Text': 'IkbalAffiliate adalah platform rekomendasi gadget dan elektronik yang dikurasi langsung oleh Ikbal Maulana. Kami menguji, membandingkan, dan memilih produk terbaik dari berbagai marketplace resmi seperti Tokopedia, Shopee, dan TikTok Shop, lalu menyajikannya lengkap dengan ulasan singkat dan video demo — supaya proses belanja kamu lebih cepat dan lebih yakin.',
+  'Instagram Name': '@1kbal_19',
+  'Instagram URL': 'https://instagram.com/1kbal_19',
+  'Poster Image URL': 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200',
+  'About Text': 'IkbalAffiliate adalah platform rekomendasi gadget dan elektronik yang dikurasi langsung oleh Ikbal Maulana. Kami menguji, membandingkan, dan memilih produk terbaik dari berbagai marketplace resmi seperti Tokopedia, Shopee, dan TikTok Shop, lalu menyajikannya lengkap dengan ulasan singkat — supaya proses belanja kamu lebih cepat dan lebih yakin.',
   'Affiliate Disclaimer': 'Sebagian tautan pada situs ini adalah tautan affiliate. Jika kamu membeli produk melalui tautan tersebut, IkbalAffiliate dapat menerima komisi kecil tanpa biaya tambahan apa pun bagimu. Rekomendasi tetap didasarkan pada penilaian jujur terhadap kualitas produk.'
 };
 const DEMO_CATEGORIES = ['Smartphone','Audio','Aksesoris','Smart Home','Laptop & PC'];
@@ -442,8 +431,6 @@ let SEARCH_QUERY = '';
 /* =====================================================================
    UTILITAS
    ===================================================================== */
-
-// Validasi URL sederhana sebelum dipakai sebagai href/src
 function isValidUrl(str){
   if(!str || typeof str !== 'string') return false;
   try{
@@ -475,7 +462,6 @@ function calcDiscount(p){
   return '';
 }
 
-// Mengubah URL video (YouTube/Vimeo/file langsung) jadi HTML embed
 function videoEmbedHtml(url, autoplay){
   if(!isValidUrl(url)) return '';
   let u;
@@ -490,17 +476,19 @@ function videoEmbedHtml(url, autoplay){
     const id = u.pathname.split('/').filter(Boolean).pop();
     return `<iframe src="https://player.vimeo.com/video/${id}?autoplay=${ap}" title="Video" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
   }
-  // Anggap file video langsung (mp4/webm dll)
   return `<video controls ${autoplay ? 'autoplay muted' : ''} src="${u.href}"></video>`;
 }
 
 /* =====================================================================
-   RENDER: HERO INTRO VIDEO
+   RENDER: HERO POSTER 16:9
    ===================================================================== */
-function renderHeroVideo(introVideoUrl){
-  const box = document.getElementById('heroVideoBox');
-  const embed = videoEmbedHtml(introVideoUrl, false);
-  box.innerHTML = embed || '<div class="placeholder">Video perkenalan belum tersedia</div>';
+function renderHeroPoster(posterUrl){
+  const box = document.getElementById('heroPosterBox');
+  if(isValidUrl(posterUrl)){
+    box.innerHTML = `<img src="${escapeHtml(posterUrl)}" alt="Banner IkbalAffiliate" loading="lazy">`;
+  }else{
+    box.innerHTML = '<div class="placeholder">Poster banner belum tersedia</div>';
+  }
 }
 
 /* =====================================================================
@@ -603,7 +591,7 @@ function renderProducts(){
 }
 
 /* =====================================================================
-   MODAL VIDEO
+   MODAL VIDEO PRODUK
    ===================================================================== */
 function openVideoModal(encodedUrl){
   const url = decodeURIComponent(encodedUrl);
@@ -622,18 +610,18 @@ document.getElementById('videoModal').addEventListener('click', (e) => {
 });
 
 /* =====================================================================
-   RENDER: SETTINGS (About, Disclaimer, Instagram, Header)
+   RENDER: SETTINGS
    ===================================================================== */
 function renderSettings(settings){
   document.getElementById('aboutText').textContent = settings['About Text'] || '-';
   document.getElementById('disclaimerText').textContent = settings['Affiliate Disclaimer'] || '-';
 
-  const igName = settings['1kbal_19'] || '@1kbal_19';
-  const igUrl = settings['https://instagram.com/ikbalaffiliate'];
+  const igName = settings['Instagram Name'] || '@1kbal_19';
+  const igUrl = settings['Instagram URL'] || 'https://instagram.com/1kbal_19';
   document.getElementById('igLabel').textContent = igName;
   document.getElementById('igLink').href = isValidUrl(igUrl) ? igUrl : '#';
 
-  renderHeroVideo(settings['Intro Video URL']);
+  renderHeroPoster(settings['Poster Image URL'] || settings['Intro Video URL'] || DEMO_SETTINGS['Poster Image URL']);
 }
 
 /* =====================================================================
@@ -647,12 +635,11 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 });
 
 /* =====================================================================
-   AMBIL DATA DARI GOOGLE APPS SCRIPT (ATAU DATA DEMO)
+   AMBIL DATA
    ===================================================================== */
 async function loadData(){
   renderSkeleton();
 
-  // Mode demo: dipakai kalau API_URL belum diisi
   if(!CONFIG.API_URL){
     ALL_PRODUCTS = DEMO_PRODUCTS;
     ALL_CATEGORIES = DEMO_CATEGORIES;
@@ -670,7 +657,7 @@ async function loadData(){
     const json = await res.json();
     if(!json || json.success === false) throw new Error(json && json.message ? json.message : 'Format data tidak dikenali');
 
-    const data = json.data || json; // fleksibel terhadap struktur payload
+    const data = json.data || json;
     ALL_PRODUCTS = Array.isArray(data.products) ? data.products : [];
     ALL_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
     const settings = data.settings || {};
