@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IkbalAffiliate — Rekomendasi Produk Pilihan</title>
-<meta name="description" content="IkbalAffiliate — rekomendasi produk terbaik dengan harga promo, dikurasi langsung oleh Ikbal Maulana.">
+<title>IkbalAffiliate — Rekomendasi Gadget Pilihan</title>
+<meta name="description" content="IkbalAffiliate — rekomendasi produk gadget & elektronik terbaik dengan harga promo, dikurasi langsung oleh Ikbal Maulana.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -88,7 +88,7 @@
   .ig-link:hover{border-color:var(--accent);}
 
   /* =========================================================
-     HERO & POSTER 16:9
+     HERO
      ========================================================= */
   .hero{
     background:var(--navy);color:#fff;
@@ -124,12 +124,12 @@
   .hero-badges div{font-size:13px;color:#98A2B3;}
   .hero-badges strong{display:block;font-family:var(--font-display);font-size:22px;color:#fff;}
 
-  .hero-poster{
-    border-radius:18px;overflow:hidden;background:#1D2939;
-    aspect-ratio:16/9;border:1px solid #2A3546;box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  .hero-video{
+    border-radius:18px;overflow:hidden;background:#000;
+    aspect-ratio:16/10;border:1px solid #2A3546;box-shadow:0 20px 50px rgba(0,0,0,0.4);
   }
-  .hero-poster img{width:100%;height:100%;object-fit:cover;}
-  .hero-poster .placeholder{
+  .hero-video iframe,.hero-video video{width:100%;height:100%;border:0;}
+  .hero-video .placeholder{
     width:100%;height:100%;display:flex;align-items:center;justify-content:center;
     color:#667085;font-size:14px;flex-direction:column;gap:8px;
   }
@@ -235,21 +235,23 @@
   .footer-inner .logo{color:#fff;}
 
   /* =========================================================
-     MODAL (Video Produk)
+     MODAL (Video & Sosmed)
      ========================================================= */
   .modal-overlay{
-    position:fixed;inset:0;background:rgba(16,24,40,0.8);display:none;
+    position:fixed;inset:0;background:rgba(16,24,40,0.85);display:none;
     align-items:center;justify-content:center;z-index:100;padding:20px;
   }
   .modal-overlay.open{display:flex;}
   .modal-box{
-    background:#000;border-radius:14px;overflow:hidden;width:100%;max-width:820px;
-    aspect-ratio:16/9;position:relative;
+    background:#000;border-radius:14px;overflow:hidden;width:100%;
+    max-width:420px;height:75vh;position:relative;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.5);
   }
   .modal-box iframe,.modal-box video{width:100%;height:100%;border:0;}
   .modal-close{
-    position:absolute;top:-42px;right:0;color:#fff;font-size:14px;
-    display:flex;align-items:center;gap:6px;
+    position:absolute;top:-36px;right:0;color:#fff;font-size:14px;
+    display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;
   }
 
   /* =========================================================
@@ -271,15 +273,12 @@
 </head>
 <body>
 
-<!-- ============================================================
-     HEADER
-     ============================================================ -->
 <header class="site-header">
   <div class="header-inner">
     <div class="logo"><span>Ikbal</span><span class="dot">Affiliate</span></div>
     <div class="header-search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" type="text" placeholder="Cari produk unggulan...">
+      <input id="searchInput" type="text" placeholder="Cari produk gadget & elektronik...">
     </div>
     <div class="header-actions">
       <a class="ig-link" id="igLink" href="#" target="_blank" rel="noopener">
@@ -290,15 +289,12 @@
   </div>
 </header>
 
-<!-- ============================================================
-     HERO + POSTER BANNER (16:9)
-     ============================================================ -->
 <section class="hero">
   <div class="container hero-inner">
     <div>
-      <span class="hero-eyebrow">Kurasi Produk Terpercaya</span>
-      <h1>Rekomendasi produk yang benar-benar layak dibeli.</h1>
-      <p class="lead">IkbalAffiliate merangkum produk pilihan lengkap dengan ulasan singkat, video demo, dan harga promo terbaru — supaya kamu belanja lebih yakin.</p>
+      <span class="hero-eyebrow">Kurasi Gadget Terpercaya</span>
+      <h1>Rekomendasi gadget yang benar-benar layak dibeli.</h1>
+      <p class="lead">IkbalAffiliate merangkum produk gadget & elektronik pilihan lengkap dengan ulasan singkat, video, dan harga promo terbaru — supaya kamu belanja lebih yakin.</p>
       <div class="hero-cta">
         <a href="#produk" class="btn btn-primary">Lihat Semua Produk</a>
         <a href="#about" class="btn btn-ghost">Tentang Kami</a>
@@ -309,24 +305,18 @@
         <div><strong>100%</strong>Link affiliate resmi</div>
       </div>
     </div>
-    <div class="hero-poster" id="heroPosterBox">
-      <div class="placeholder">Memuat poster banner…</div>
+    <div class="hero-video" id="heroVideoBox">
+      <div class="placeholder">Memuat video perkenalan…</div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     FILTER & SEARCH BAR
-     ============================================================ -->
 <div class="filter-bar" id="filterBar">
   <div class="filter-inner" id="categoryChips">
     <button class="chip active" data-cat="__all">Semua</button>
   </div>
 </div>
 
-<!-- ============================================================
-     PRODUCT GRID
-     ============================================================ -->
 <section class="section" id="produk">
   <div class="container">
     <div class="section-head">
@@ -337,14 +327,10 @@
       <span class="result-count" id="resultCount"></span>
     </div>
     <div class="product-grid" id="productGrid">
-      <!-- dirender lewat JS -->
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     ABOUT
-     ============================================================ -->
 <section class="section section-alt" id="about">
   <div class="container about-grid">
     <div>
@@ -365,9 +351,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
 <footer>
   <div class="container footer-inner">
     <div class="logo"><span>Ikbal</span><span class="dot" style="color:var(--accent)">Affiliate</span></div>
@@ -375,20 +358,14 @@
   </div>
 </footer>
 
-<!-- ============================================================
-     MODAL VIDEO PRODUK
-     ============================================================ -->
 <div class="modal-overlay" id="videoModal">
   <div class="modal-box">
     <button class="modal-close" id="modalClose">✕ Tutup</button>
-    <div id="modalContent"></div>
+    <div id="modalContent" style="width:100%;height:100%;"></div>
   </div>
 </div>
 
 <script>
-/* =====================================================================
-   KONFIGURASI
-   ===================================================================== */
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbwxCWQD_8BNM51ne658suedajcmvI9-A21JaYno-yyW64WN0Jh2nry2pODkYRDJPCmTkw/exec'
 };
@@ -398,39 +375,23 @@ const BRAND = {
   ceoName: 'Ikbal Maulana'
 };
 
-/* =====================================================================
-   DATA DEMO
-   ===================================================================== */
 const DEMO_SETTINGS = {
   'Instagram Name': '@1kbal_19',
-  'Instagram URL': 'https://instagram.com/1kbal_19',
-  'Poster Image URL': 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200',
-  'About Text': 'IkbalAffiliate adalah platform rekomendasi produk yang dikurasi langsung oleh Ikbal Maulana. Kami menguji, membandingkan, dan memilih produk terbaik dari berbagai marketplace resmi seperti Tokopedia, Shopee, dan TikTok Shop, lalu menyajikannya lengkap dengan ulasan singkat — supaya proses belanja kamu lebih cepat dan lebih yakin.',
+  'Instagram URL': 'https://instagram.com/ikbalaffiliate',
+  'Intro Video URL': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  'About Text': 'IkbalAffiliate adalah platform rekomendasi gadget dan elektronik yang dikurasi langsung oleh Ikbal Maulana. Kami menguji, membandingkan, dan memilih produk terbaik dari berbagai marketplace resmi seperti Tokopedia, Shopee, dan TikTok Shop, lalu menyajikannya lengkap dengan ulasan singkat dan video demo — supaya proses belanja kamu lebih cepat dan lebih yakin.',
   'Affiliate Disclaimer': 'Sebagian tautan pada situs ini adalah tautan affiliate. Jika kamu membeli produk melalui tautan tersebut, IkbalAffiliate dapat menerima komisi kecil tanpa biaya tambahan apa pun bagimu. Rekomendasi tetap didasarkan pada penilaian jujur terhadap kualitas produk.'
 };
 const DEMO_CATEGORIES = ['Smartphone','Audio','Aksesoris','Smart Home','Laptop & PC'];
 const DEMO_PRODUCTS = [
-  {ProductID:'P001',ProductName:'EchoBuds Pro TWS',ImageURL:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',NormalPrice:599000,PromoPrice:349000,Discount:'',Category:'Audio',Description:'Earbuds TWS dengan Active Noise Cancelling, baterai 30 jam, dan mic jernih untuk kerja & meeting.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P002',ProductName:'Kamera Aksi UltraCam 4K',ImageURL:'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600',NormalPrice:1250000,PromoPrice:899000,Discount:'',Category:'Aksesoris',Description:'Kamera aksi tahan air 10m, rekam 4K/60fps, cocok untuk konten outdoor dan olahraga ekstrem.',VideoURL:'',AffiliateURL:'https://shopee.co.id',Status:'Active'},
-  {ProductID:'P003',ProductName:'Smartphone NovaX 12',ImageURL:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600',NormalPrice:3999000,PromoPrice:3399000,Discount:'',Category:'Smartphone',Description:'Layar AMOLED 120Hz, RAM 8GB, kamera utama 108MP, pengisian cepat 67W.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P004',ProductName:'Smart Plug WiFi 2-Pack',ImageURL:'https://images.unsplash.com/photo-1558002038-1055907df827?w=600',NormalPrice:189000,PromoPrice:129000,Discount:'',Category:'Smart Home',Description:'Kendalikan perangkat elektronik dari HP, kompatibel Google Home & Alexa, hemat listrik.',VideoURL:'',AffiliateURL:'https://www.tiktok.com/shop',Status:'Active'},
-  {ProductID:'P005',ProductName:'Laptop Sleeve ArmorCase 14"',ImageURL:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600',NormalPrice:220000,PromoPrice:159000,Discount:'',Category:'Aksesoris',Description:'Sarung laptop anti air dan anti benturan dengan lapisan busa ekstra, muat hingga charger.',VideoURL:'',AffiliateURL:'https://shopee.co.id',Status:'Active'},
-  {ProductID:'P006',ProductName:'Speaker Bluetooth BoomBox Mini',ImageURL:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600',NormalPrice:449000,PromoPrice:299000,Discount:'',Category:'Audio',Description:'Suara bass dalam, tahan percikan air IPX5, daya tahan baterai hingga 12 jam pemakaian.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P007',ProductName:'Mini PC WorkStation Lite',ImageURL:'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600',NormalPrice:4500000,PromoPrice:3990000,Discount:'',Category:'Laptop & PC',Description:'Mini PC hemat ruang untuk kerja kantoran dan multitasking ringan, sudah termasuk SSD 256GB.',VideoURL:'',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P008',ProductName:'Smartwatch PulseFit 2',ImageURL:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600',NormalPrice:799000,PromoPrice:549000,Discount:'',Category:'Aksesoris',Description:'Pelacak detak jantung, SpO2, dan tidur, layar AMOLED terang, tahan air untuk aktivitas harian.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tiktok.com/shop',Status:'Active'}
+  {ProductID:'P001',ProductName:'EchoBuds Pro TWS',ImageURL:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',NormalPrice:599000,PromoPrice:349000,Discount:'',Category:'Audio',Description:'Earbuds TWS dengan Active Noise Cancelling, baterai 30 jam, dan mic jernih.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'}
 ];
 
-/* =====================================================================
-   STATE
-   ===================================================================== */
 let ALL_PRODUCTS = [];
 let ALL_CATEGORIES = [];
 let ACTIVE_CATEGORY = '__all';
 let SEARCH_QUERY = '';
 
-/* =====================================================================
-   UTILITAS
-   ===================================================================== */
 function isValidUrl(str){
   if(!str || typeof str !== 'string') return false;
   try{
@@ -443,7 +404,7 @@ function isValidUrl(str){
 
 function formatRupiah(num){
   const n = Number(num);
-  if(isNaN(n)) return '-';
+  if(isNaN(n) || n === 0) return '-';
   return 'Rp' + n.toLocaleString('id-ID');
 }
 
@@ -462,38 +423,52 @@ function calcDiscount(p){
   return '';
 }
 
+/* Pemutar Video Media Sosial (TikTok, Instagram Reels, Youtube, MP4, Shopee) */
 function videoEmbedHtml(url, autoplay){
-  if(!isValidUrl(url)) return '';
+  if(!isValidUrl(url)) return null;
   let u;
-  try{ u = new URL(url.trim()); }catch(e){ return ''; }
+  try{ u = new URL(url.trim()); }catch(e){ return null; }
   const ap = autoplay ? '1' : '0';
+
+  // YouTube Shorts / Standard Video
   if(u.hostname.includes('youtube.com') || u.hostname.includes('youtu.be')){
     let videoId = u.hostname.includes('youtu.be') ? u.pathname.slice(1) : u.searchParams.get('v');
-    if(!videoId) return '';
-    return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=${ap}&mute=${ap}" title="Video" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    if(!videoId && u.pathname.includes('/shorts/')){
+      videoId = u.pathname.split('/shorts/')[1].split('?')[0];
+    }
+    if(!videoId) return null;
+    return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=${ap}&mute=${ap}" title="YouTube Video" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
   }
-  if(u.hostname.includes('vimeo.com')){
-    const id = u.pathname.split('/').filter(Boolean).pop();
-    return `<iframe src="https://player.vimeo.com/video/${id}?autoplay=${ap}" title="Video" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+
+  // TikTok Video
+  if(u.hostname.includes('tiktok.com')){
+    const match = u.pathname.match(/\/video\/(\d+)/);
+    if(match && match[1]){
+      return `<iframe src="https://www.tiktok.com/embed/v2/${match[1]}" title="TikTok Video" allowfullscreen></iframe>`;
+    }
   }
-  return `<video controls ${autoplay ? 'autoplay muted' : ''} src="${u.href}"></video>`;
+
+  // Instagram Reels / Post
+  if(u.hostname.includes('instagram.com')){
+    const cleanPath = u.pathname.replace(/\/$/, '');
+    return `<iframe src="https://www.instagram.com${cleanPath}/embed" title="Instagram Reel" allowtransparency="true" allowfullscreen></iframe>`;
+  }
+
+  // Direct MP4 / WebM
+  if(u.pathname.match(/\.(mp4|webm|ogg)$/i)){
+    return `<video controls ${autoplay ? 'autoplay muted' : ''} src="${u.href}"></video>`;
+  }
+
+  // Shopee Video / Unsupported embed -> Return null untuk dialihkan ke tab baru
+  return null;
 }
 
-/* =====================================================================
-   RENDER: HERO POSTER 16:9
-   ===================================================================== */
-function renderHeroPoster(posterUrl){
-  const box = document.getElementById('heroPosterBox');
-  if(isValidUrl(posterUrl)){
-    box.innerHTML = `<img src="${escapeHtml(posterUrl)}" alt="Banner IkbalAffiliate" loading="lazy">`;
-  }else{
-    box.innerHTML = '<div class="placeholder">Poster banner belum tersedia</div>';
-  }
+function renderHeroVideo(introVideoUrl){
+  const box = document.getElementById('heroVideoBox');
+  const embed = videoEmbedHtml(introVideoUrl, false);
+  box.innerHTML = embed || '<div class="placeholder">Video perkenalan belum tersedia</div>';
 }
 
-/* =====================================================================
-   RENDER: KATEGORI (CHIPS)
-   ===================================================================== */
 function renderCategoryChips(categories){
   const wrap = document.getElementById('categoryChips');
   wrap.innerHTML = '<button class="chip active" data-cat="__all">Semua</button>';
@@ -515,9 +490,6 @@ function renderCategoryChips(categories){
   });
 }
 
-/* =====================================================================
-   RENDER: GRID PRODUK
-   ===================================================================== */
 function renderSkeleton(){
   const grid = document.getElementById('productGrid');
   grid.innerHTML = Array.from({length:8}).map(() => '<div class="skeleton skeleton-card"></div>').join('');
@@ -590,16 +562,20 @@ function renderProducts(){
   }).join('');
 }
 
-/* =====================================================================
-   MODAL VIDEO PRODUK
-   ===================================================================== */
 function openVideoModal(encodedUrl){
   const url = decodeURIComponent(encodedUrl);
   const embed = videoEmbedHtml(url, true);
-  if(!embed) return;
+  
+  if(!embed){
+    // Shopee Video / link media sosial yang diblokir iframe-nya langsung diarahkan ke tab baru
+    window.open(url, '_blank');
+    return;
+  }
+  
   document.getElementById('modalContent').innerHTML = embed;
   document.getElementById('videoModal').classList.add('open');
 }
+
 function closeVideoModal(){
   document.getElementById('videoModal').classList.remove('open');
   document.getElementById('modalContent').innerHTML = '';
@@ -609,24 +585,18 @@ document.getElementById('videoModal').addEventListener('click', (e) => {
   if(e.target.id === 'videoModal') closeVideoModal();
 });
 
-/* =====================================================================
-   RENDER: SETTINGS
-   ===================================================================== */
 function renderSettings(settings){
   document.getElementById('aboutText').textContent = settings['About Text'] || '-';
   document.getElementById('disclaimerText').textContent = settings['Affiliate Disclaimer'] || '-';
 
   const igName = settings['Instagram Name'] || '@1kbal_19';
-  const igUrl = settings['Instagram URL'] || 'https://instagram.com/1kbal_19';
+  const igUrl = settings['Instagram URL'];
   document.getElementById('igLabel').textContent = igName;
   document.getElementById('igLink').href = isValidUrl(igUrl) ? igUrl : '#';
 
-  renderHeroPoster(settings['Poster Image URL'] || settings['Intro Video URL'] || DEMO_SETTINGS['Poster Image URL']);
+  renderHeroVideo(settings['Intro Video URL']);
 }
 
-/* =====================================================================
-   SEARCH INPUT
-   ===================================================================== */
 let searchTimer = null;
 document.getElementById('searchInput').addEventListener('input', (e) => {
   SEARCH_QUERY = e.target.value;
@@ -634,9 +604,6 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
   searchTimer = setTimeout(renderProducts, 200);
 });
 
-/* =====================================================================
-   AMBIL DATA
-   ===================================================================== */
 async function loadData(){
   renderSkeleton();
 
@@ -658,7 +625,17 @@ async function loadData(){
     if(!json || json.success === false) throw new Error(json && json.message ? json.message : 'Format data tidak dikenali');
 
     const data = json.data || json;
-    ALL_PRODUCTS = Array.isArray(data.products) ? data.products : [];
+    
+    // PEMBERSIH KUNCI: Menghapus spasi dari header Google Sheets otomatis (misal: "Product Name" -> "ProductName")
+    const rawProducts = Array.isArray(data.products) ? data.products : [];
+    ALL_PRODUCTS = rawProducts.map(item => {
+      const cleanObj = {};
+      Object.keys(item).forEach(k => {
+        cleanObj[k.replace(/\s+/g, '')] = item[k];
+      });
+      return cleanObj;
+    });
+
     ALL_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
     const settings = data.settings || {};
 
@@ -670,12 +647,12 @@ async function loadData(){
     renderProducts();
   }catch(err){
     console.error(err);
-    renderErrorState('Tidak dapat mengambil data dari Google Sheets. Periksa kembali CONFIG.API_URL dan pastikan Apps Script sudah di-deploy sebagai "Anyone can access". Detail: ' + err.message);
+    renderErrorState('Gagal mengambil data dari Google Sheets. Detail: ' + err.message);
   }
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();
-document.title = BRAND.websiteName + ' — Rekomendasi Produk Pilihan';
+document.title = BRAND.websiteName + ' — Rekomendasi Gadget Pilihan';
 loadData();
 </script>
 </body>
