@@ -60,7 +60,7 @@
     color:#fff;
   }
   .header-inner{
-    display:flex;align-items:center;gap:20px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
     padding:14px 24px;max-width:1180px;margin:0 auto;
     flex-wrap:wrap;
   }
@@ -69,16 +69,6 @@
     display:flex;align-items:center;gap:8px;white-space:nowrap;
   }
   .logo .dot{color:var(--accent);}
-  .header-search{
-    flex:1 1 260px;display:flex;align-items:center;gap:8px;
-    background:var(--navy-soft);border-radius:999px;padding:8px 16px;
-    min-width:180px;
-  }
-  .header-search input{
-    flex:1;border:none;background:transparent;color:#fff;font-size:14px;
-  }
-  .header-search input::placeholder{color:#98A2B3;}
-  .header-search svg{flex-shrink:0;opacity:0.7;}
   .header-actions{display:flex;align-items:center;gap:14px;}
   .ig-link{
     display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;
@@ -142,9 +132,18 @@
     position:sticky;top:64px;z-index:40;
   }
   .filter-inner{
-    display:flex;align-items:center;gap:14px;padding:16px 24px;max-width:1180px;margin:0 auto;
+    display:flex;align-items:center;gap:14px;padding:12px 0 16px;
     overflow-x:auto;
   }
+  .search-row{
+    display:flex;align-items:center;gap:10px;
+    background:var(--paper);border:1px solid var(--border);border-radius:999px;
+    padding:10px 18px;margin-top:14px;
+  }
+  .search-row input{flex:1;border:none;background:transparent;font-size:14px;color:var(--text);}
+  .search-row input:focus{outline:none;}
+  .search-row input::placeholder{color:var(--muted);}
+  .search-row svg{flex-shrink:0;color:var(--muted);}
   .chip{
     flex-shrink:0;padding:8px 16px;border-radius:999px;border:1px solid var(--border);
     font-size:13px;font-weight:600;color:var(--muted);transition:all .15s;
@@ -235,24 +234,6 @@
   .footer-inner .logo{color:#fff;}
 
   /* =========================================================
-     MODAL (Video Produk)
-     ========================================================= */
-  .modal-overlay{
-    position:fixed;inset:0;background:rgba(16,24,40,0.8);display:none;
-    align-items:center;justify-content:center;z-index:100;padding:20px;
-  }
-  .modal-overlay.open{display:flex;}
-  .modal-box{
-    background:#000;border-radius:14px;overflow:hidden;width:100%;max-width:820px;
-    aspect-ratio:16/9;position:relative;
-  }
-  .modal-box iframe,.modal-box video{width:100%;height:100%;border:0;}
-  .modal-close{
-    position:absolute;top:-42px;right:0;color:#fff;font-size:14px;
-    display:flex;align-items:center;gap:6px;
-  }
-
-  /* =========================================================
      RESPONSIVE
      ========================================================= */
   @media (max-width:900px){
@@ -277,10 +258,6 @@
 <header class="site-header">
   <div class="header-inner">
     <div class="logo"><span>Ikbal</span><span class="dot">Affiliate</span></div>
-    <div class="header-search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="searchInput" type="text" placeholder="Cari produk unggulan...">
-    </div>
     <div class="header-actions">
       <a class="ig-link" id="igLink" href="#" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
@@ -319,8 +296,14 @@
      FILTER & SEARCH BAR
      ============================================================ -->
 <div class="filter-bar" id="filterBar">
-  <div class="filter-inner" id="categoryChips">
-    <button class="chip active" data-cat="__all">Semua</button>
+  <div class="container">
+    <div class="search-row">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Cari produk unggulan...">
+    </div>
+    <div class="filter-inner" id="categoryChips">
+      <button class="chip active" data-cat="__all">Semua</button>
+    </div>
   </div>
 </div>
 
@@ -374,16 +357,6 @@
     <div>© <span id="year"></span> IkbalAffiliate — Dikelola oleh Ikbal Maulana. Semua rekomendasi bersifat independen.</div>
   </div>
 </footer>
-
-<!-- ============================================================
-     MODAL VIDEO PRODUK
-     ============================================================ -->
-<div class="modal-overlay" id="videoModal">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose">✕ Tutup</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
 
 <script>
 /* =====================================================================
@@ -460,95 +433,6 @@ function calcDiscount(p){
     return Math.round((1 - promo / normal) * 100) + '%';
   }
   return '';
-}
-
-function getVideoPlatform(url){
-  if(!isValidUrl(url)) return '';
-  try{
-    const u = new URL(url.trim());
-    const host = u.hostname.toLowerCase().replace(/^www\./,'');
-    if(host.includes('youtube.com') || host === 'youtu.be') return 'YouTube';
-    if(host.includes('vimeo.com')) return 'Vimeo';
-    if(host.includes('tiktok.com')) return 'TikTok';
-    if(host.includes('instagram.com')) return 'Instagram Reels';
-    if(host.includes('shopee.co.id') || host.includes('shopee.com')) return 'Shopee Video';
-    if(host.includes('facebook.com') || host.includes('fb.watch')) return 'Facebook';
-    if(/\.(mp4|webm|ogg)(?:$|\?)/i.test(u.pathname)) return 'Video File';
-    return 'External Video';
-  }catch(e){ return ''; }
-}
-
-function videoEmbedHtml(url, autoplay){
-  if(!isValidUrl(url)) return '';
-  let u;
-  try{ u = new URL(url.trim()); }catch(e){ return ''; }
-
-  const host = u.hostname.toLowerCase().replace(/^www\./,'');
-  const ap = autoplay ? '1' : '0';
-  const platform = getVideoPlatform(url);
-
-  // YouTube / Shorts
-  if(host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtu.be'){
-    let videoId = '';
-    if(host === 'youtu.be') videoId = u.pathname.split('/').filter(Boolean)[0] || '';
-    else if(u.pathname.startsWith('/shorts/')) videoId = u.pathname.split('/')[2] || '';
-    else videoId = u.searchParams.get('v') || '';
-    if(!videoId) return externalVideoFallback(u.href, 'YouTube');
-    return `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=${ap}&mute=${ap}&rel=0" title="YouTube Video" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>`;
-  }
-
-  // Vimeo
-  if(host === 'vimeo.com' || host === 'player.vimeo.com'){
-    const id = u.pathname.split('/').filter(Boolean).pop();
-    if(!id || !/^\d+$/.test(id)) return externalVideoFallback(u.href, 'Vimeo');
-    return `<iframe src="https://player.vimeo.com/video/${encodeURIComponent(id)}?autoplay=${ap}" title="Vimeo Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-  }
-
-  // TikTok: supports normal video URLs and short vm.tiktok.com links.
-  if(host === 'tiktok.com' || host === 'm.tiktok.com'){
-    const match = u.pathname.match(/\/video\/(\d+)/i);
-    if(match){
-      return `<iframe src="https://www.tiktok.com/player/v1/${match[1]}?autoplay=${ap}&description=1" title="TikTok Video" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-    }
-    return externalVideoFallback(u.href, 'TikTok');
-  }
-
-  if(host === 'vm.tiktok.com' || host === 'vt.tiktok.com'){
-    return externalVideoFallback(u.href, 'TikTok');
-  }
-
-  // Instagram Reels / posts. Instagram generally requires its own embed URL.
-  if(host === 'instagram.com' || host === 'instagram.co'){
-    const match = u.pathname.match(/\/(reel|reels|p)\/([^/?#]+)/i);
-    if(match){
-      return `<iframe src="https://www.instagram.com/${match[1].toLowerCase()}/${encodeURIComponent(match[2])}/embed/captioned/" title="Instagram Reel" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-    }
-    return externalVideoFallback(u.href, 'Instagram');
-  }
-
-  // Facebook videos/reels.
-  if(host === 'facebook.com' || host === 'm.facebook.com' || host === 'fb.watch'){
-    return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(u.href)}&show_text=false&autoplay=${ap}" title="Facebook Video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-  }
-
-  // IMPORTANT: only use HTML5 <video> for an actual video file.
-  // Do not send Shopee pages, CDN pages, or ordinary web URLs to <video>,
-  // because that produces the 0:00 black player shown in the screenshot.
-  if(/\.(mp4|webm|ogg|m4v)(?:$|[?#])/i.test(u.pathname)){
-    return `<video controls ${autoplay ? 'autoplay muted' : ''} playsinline preload="metadata" src="${escapeHtml(u.href)}"></video>`;
-  }
-
-  // Shopee Video and other marketplace/social links may explicitly block iframe playback.
-  // We cannot bypass that restriction from a normal HTML page, so open the original page instead.
-  return externalVideoFallback(u.href, platform || 'Video Promosi');
-}
-
-function externalVideoFallback(url, platform){
-  return `<div style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:24px;text-align:center;background:#111;color:#fff">
-    <div style="font-size:20px;font-weight:700">${escapeHtml(platform || 'Video Promosi')}</div>
-    <p style="margin:0;color:#bbb;max-width:560px;line-height:1.6">Video ini berada di platform yang tidak mengizinkan pemutaran langsung di dalam website. Buka video aslinya untuk menontonnya.</p>
-    <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Buka Video Asli ↗</a>
-  </div>`;
 }
 
 /* =====================================================================
@@ -640,9 +524,9 @@ function renderProducts(){
         <img src="${imgSrc}" alt="${escapeHtml(p.ProductName)}" loading="lazy">
         ${discount ? `<span class="badge-discount">-${escapeHtml(discount).replace('%','')}%</span>` : ''}
         ${p.Category ? `<span class="badge-category">${escapeHtml(p.Category)}</span>` : ''}
-        ${hasVideo ? `<button class="video-thumb-btn" title="Tonton Video" onclick="openVideoModal('${encodeURIComponent(p.VideoURL)}')">
+        ${hasVideo ? `<a class="video-thumb-btn" title="Tonton Video" href="${escapeHtml(p.VideoURL)}" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg>
-        </button>` : ''}
+        </a>` : ''}
       </div>
       <div class="card-body">
         <h3>${escapeHtml(p.ProductName)}</h3>
@@ -655,31 +539,12 @@ function renderProducts(){
           ${buyHref !== '#'
             ? `<a class="btn btn-primary btn-sm btn-block" href="${buyHref}" target="_blank" rel="noopener nofollow sponsored">Beli Sekarang</a>`
             : `<button class="btn btn-primary btn-sm btn-block" disabled style="opacity:.5;cursor:not-allowed;">Link tidak tersedia</button>`}
-          ${hasVideo ? `<button class="btn btn-outline btn-sm" onclick="openVideoModal('${encodeURIComponent(p.VideoURL)}')">Tonton Video</button>` : ''}
+          ${hasVideo ? `<a class="btn btn-outline btn-sm" href="${escapeHtml(p.VideoURL)}" target="_blank" rel="noopener">Tonton Video</a>` : ''}
         </div>
       </div>
     </div>`;
   }).join('');
 }
-
-/* =====================================================================
-   MODAL VIDEO PRODUK
-   ===================================================================== */
-function openVideoModal(encodedUrl){
-  const url = decodeURIComponent(encodedUrl);
-  const embed = videoEmbedHtml(url, true);
-  if(!embed) return;
-  document.getElementById('modalContent').innerHTML = embed;
-  document.getElementById('videoModal').classList.add('open');
-}
-function closeVideoModal(){
-  document.getElementById('videoModal').classList.remove('open');
-  document.getElementById('modalContent').innerHTML = '';
-}
-document.getElementById('modalClose').addEventListener('click', closeVideoModal);
-document.getElementById('videoModal').addEventListener('click', (e) => {
-  if(e.target.id === 'videoModal') closeVideoModal();
-});
 
 /* =====================================================================
    RENDER: SETTINGS
