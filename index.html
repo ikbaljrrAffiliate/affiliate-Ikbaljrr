@@ -17,6 +17,7 @@
     --navy-soft:#1D2939;
     --paper:#F8F7F4;
     --card:#FFFFFF;
+    --card-media-bg:#EEF1F5;
     --accent:#FF7A1A;
     --accent-dark:#E15C00;
     --teal:#0F766E;
@@ -29,6 +30,28 @@
     --shadow:0 8px 24px rgba(16,24,40,0.08);
     --font-display:'Sora',sans-serif;
     --font-body:'Inter',sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#15171C;
+      --card:#1C1F26;
+      --card-media-bg:#12141A;
+      --text:#F2F4F7;
+      --muted:#9AA3B2;
+      --border:#2B2F38;
+      --teal-soft:#12302C;
+      --shadow:0 8px 24px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#15171C;
+    --card:#1C1F26;
+    --card-media-bg:#12141A;
+    --text:#F2F4F7;
+    --muted:#9AA3B2;
+    --border:#2B2F38;
+    --teal-soft:#12302C;
+    --shadow:0 8px 24px rgba(0,0,0,0.4);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -43,7 +66,7 @@
   p{margin:0;}
   a{color:inherit;text-decoration:none;}
   img{max-width:100%;display:block;}
-  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
   .container{max-width:1180px;margin:0 auto;padding:0 24px;}
   :focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
   @media (prefers-reduced-motion: reduce){
@@ -168,8 +191,9 @@
     overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s, transform .15s;
   }
   .card:hover{box-shadow:var(--shadow);transform:translateY(-3px);}
-  .card-media{position:relative;aspect-ratio:1/1;background:#EEF1F5;overflow:hidden;}
-  .card-media img{width:100%;height:100%;object-fit:cover;}
+  .card-media{position:relative;aspect-ratio:1/1;background:var(--card-media-bg);overflow:hidden;cursor:pointer;}
+  .card-media img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease;}
+  .card:hover .card-media img{transform:scale(1.045);}
   .badge-discount{
     position:absolute;top:10px;left:10px;background:var(--danger);color:#fff;
     font-size:12px;font-weight:700;padding:4px 9px;border-radius:6px;
@@ -183,15 +207,28 @@
     background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;
     box-shadow:0 2px 8px rgba(0,0,0,0.25);
   }
+  .quickview-btn{
+    position:absolute;inset:auto 10px 10px 10px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    padding:9px 12px;border-radius:8px;font-size:12.5px;font-weight:600;
+    background:rgba(16,24,40,0.88);color:#fff;
+    opacity:0;transform:translateY(6px);
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .card-media:hover .quickview-btn,
+  .card-media:focus-within .quickview-btn{opacity:1;transform:translateY(0);}
   .card-body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1;}
-  .card-body h3{font-size:15px;font-weight:600;font-family:var(--font-body);}
+  .card-body h3{font-size:15px;font-weight:600;font-family:var(--font-body);cursor:pointer;}
+  .card-body h3:hover{color:var(--accent-dark);}
   .card-desc{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
   .price-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
   .price-promo{font-family:var(--font-display);font-weight:700;font-size:18px;color:var(--navy);}
+  :root[data-theme="dark"] .price-promo{color:#fff;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .price-promo{color:#fff;}}
   .price-normal{font-size:13px;color:var(--muted);text-decoration:line-through;}
   .card-actions{display:flex;gap:8px;margin-top:auto;}
 
-  .skeleton{background:linear-gradient(90deg,#EEF1F5 25%,#F5F6F8 37%,#EEF1F5 63%);background-size:400% 100%;animation:shimmer 1.4s infinite;}
+  .skeleton{background:linear-gradient(90deg,var(--card-media-bg) 25%,var(--border) 37%,var(--card-media-bg) 63%);background-size:400% 100%;animation:shimmer 1.4s infinite;}
   @keyframes shimmer{0%{background-position:100% 0;}100%{background-position:0 0;}}
   .skeleton-card{border-radius:var(--radius);height:340px;}
 
@@ -224,6 +261,8 @@
     background:var(--teal-soft);border:1px solid #BFE6E1;border-radius:var(--radius);
     padding:22px 24px;font-size:13.5px;color:#134E4A;
   }
+  :root[data-theme="dark"] .disclaimer-box{color:#B7EDE4;border-color:#1F4A44;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .disclaimer-box{color:#B7EDE4;border-color:#1F4A44;}}
   .disclaimer-box h4{font-size:14px;color:#0F766E;margin-bottom:8px;}
 
   /* =========================================================
@@ -232,6 +271,69 @@
   footer{background:var(--navy);color:#98A2B3;padding:40px 0 28px;font-size:13px;}
   .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
   .footer-inner .logo{color:#fff;}
+
+  /* =========================================================
+     PRODUCT DETAIL MODAL
+     ========================================================= */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(16,24,40,0.6);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    opacity:0;visibility:hidden;
+    transition:opacity .18s ease;
+  }
+  .modal-overlay.open{opacity:1;visibility:visible;}
+  .modal-box{
+    background:var(--card);border-radius:18px;max-width:920px;width:100%;
+    max-height:92vh;overflow-y:auto;position:relative;
+    display:grid;grid-template-columns:1fr 1fr;
+    box-shadow:0 30px 70px rgba(0,0,0,0.35);
+    transform:translateY(16px) scale(.98);
+    transition:transform .18s ease;
+  }
+  .modal-overlay.open .modal-box{transform:translateY(0) scale(1);}
+  .modal-close{
+    position:absolute;top:14px;right:14px;z-index:2;
+    width:36px;height:36px;border-radius:50%;
+    background:rgba(16,24,40,0.85);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-media{
+    background:var(--card-media-bg);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+  }
+  .modal-media-frame{
+    width:100%;max-width:320px;aspect-ratio:9/16;
+    background:var(--card);border-radius:12px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 28px rgba(16,24,40,0.16);
+  }
+  .modal-media img{
+    width:100%;height:100%;
+    object-fit:contain;
+  }
+  .modal-info{padding:32px 32px 32px 24px;display:flex;flex-direction:column;gap:14px;}
+  .modal-eyebrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .modal-badge{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;}
+  .modal-badge.cat{background:var(--paper);border:1px solid var(--border);color:var(--muted);}
+  .modal-badge.disc{background:var(--danger);color:#fff;}
+  .modal-info h2{font-size:22px;}
+  .modal-price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .modal-price-promo{font-family:var(--font-display);font-weight:800;font-size:28px;color:var(--navy);}
+  :root[data-theme="dark"] .modal-price-promo{color:#fff;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .modal-price-promo{color:#fff;}}
+  .modal-price-normal{font-size:15px;color:var(--muted);text-decoration:line-through;}
+  .modal-desc{font-size:14.5px;color:var(--muted);white-space:pre-line;line-height:1.65;}
+  .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .modal-id{font-size:12px;color:var(--muted);}
+
+  @media (max-width:720px){
+    .modal-box{grid-template-columns:1fr;max-height:94vh;}
+    .modal-media{padding:20px;}
+    .modal-media-frame{max-width:260px;}
+    .modal-info{padding:22px;}
+  }
 
   /* =========================================================
      RESPONSIVE
@@ -315,7 +417,7 @@
     <div class="section-head">
       <div>
         <h2>Produk Pilihan</h2>
-        <p>Diperbarui langsung dari katalog IkbalAffiliate.</p>
+        <p>Klik gambar atau nama produk untuk melihat detail lengkap.</p>
       </div>
       <span class="result-count" id="resultCount"></span>
     </div>
@@ -336,7 +438,7 @@
       <div class="ceo-card">
         <div class="ceo-avatar">IM</div>
         <div>
-          <p>Ikbal Maulana</p>
+          <p id="ceoName">Ikbal Maulana</p>
           <p>Founder & CEO IkbalAffiliate</p>
         </div>
       </div>
@@ -358,40 +460,135 @@
   </div>
 </footer>
 
+<!-- ============================================================
+     PRODUCT DETAIL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Tutup detail produk">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-media">
+      <div class="modal-media-frame">
+        <img id="modalImg" src="" alt="">
+      </div>
+    </div>
+    <div class="modal-info">
+      <div class="modal-eyebrow">
+        <span class="modal-badge cat" id="modalCategory">Kategori</span>
+        <span class="modal-badge disc" id="modalDiscount" style="display:none;">-0%</span>
+      </div>
+      <h2 id="modalTitle">Nama Produk</h2>
+      <div class="modal-price-row">
+        <span class="modal-price-promo" id="modalPromo">Rp0</span>
+        <span class="modal-price-normal" id="modalNormal"></span>
+      </div>
+      <p class="modal-desc" id="modalDesc">Deskripsi produk.</p>
+      <div class="modal-actions">
+        <a class="btn btn-primary" id="modalBuy" href="#" target="_blank" rel="noopener nofollow sponsored">Beli Sekarang</a>
+        <a class="btn btn-outline" id="modalVideo" href="#" target="_blank" rel="noopener" style="display:none;">Tonton Video</a>
+      </div>
+      <span class="modal-id" id="modalIdLabel"></span>
+    </div>
+  </div>
+</div>
+
+<!-- PapaParse: dipakai untuk membaca data dari CSV -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<!-- =====================================================================
+     DATA MENTAH DARI SPREADSHEET (CSV)
+     Ini adalah salinan persis dari tab "IkbalAffiliate" di Google Sheets.
+     Untuk memperbarui produk: edit di Google Sheets, lalu File > Share >
+     Publish to web > pilih tab ini > format CSV > Publish. Salin link-nya
+     dan tempel ke CONFIG.CSV_URL di bawah supaya web SELALU mengambil data
+     terbaru langsung dari spreadsheet. Selama CONFIG.CSV_URL kosong, web
+     memakai salinan CSV yang ditempel di bawah ini sebagai sumber data.
+     ===================================================================== -->
+<script type="text/plain" id="embedded-csv">ProductID,ProductName,ImageURL,NormalPrice,PromoPrice,Discount,Category,Description,VideoURL,AffiliateURL,Status
+P001,CORONG FILTER ,https://down-id.img.susercontent.com/file/id-11134207-82252-mkg8c4533qiue2@resize_w900_nl.webp,,35000,,Aksesoris,"CORONG DONAT AKRILIK DETAK  MOTOR :BEAT 2020-2024,SCOOPY 2021-2024, ALL GENIO ,KODE : K0j",https://shopee.co.id/universal-link?redir=https%3A%2F%2Fsv.shopee.co.id%2Fshare-video%2FkMOPUHL0CQBSbYhTAAAAAA%3D%3D%3FfromSource%3Dcopy_link%26fromShareLink%3Dshare-marker%26shareUserId%3D1401449810%26contentType%3D0%26jumpType%3Dshare%26pid%3Dsv%26c%3Dshare_web%26share_obj%3Dvideo%26myVideo%3Dtrue&deep_and_web=1&smtt=0.0.9,https://s.shopee.co.id/9fKZ84EZGA,Active
+P002,LAMP LAZY,https://down-id.img.susercontent.com/file/id-11134207-7rbkb-mam760w4u82z31@resize_w900_nl.webp,920.000,320160,60,Aksesoris,"STOPLAMP BEAT DELUXE GEN 1 2020-2024 PAKET LENGKAP FULLSET !!!, TINGGAL COLOK KE SOKET MOTORNYA !!!!!!!!!!!!!!!",https://id.shp.ee/cf12qxa6?fromSource=copy_link&smtt=0.0.9,https://s.shopee.co.id/3qMmAV8Lsl,Active
+P003,Sepatu Futsal Fromzero,https://down-id.img.susercontent.com/file/id-11134207-7r98w-lyjndg6mmkncf3@resize_w900_nl.webp,350000,193000,,Fashion,"Ukuran : 38 s/d 44
+Material : Semi kulit import
+Outsole : rubber pvc lembut lentur",https://id.shp.ee/l1jnzcoi?fromSource=copy_link&smtt=0.0.9,https://s.shopee.co.id/AAGnMxQ0VX,Active
+P004,Lem AB Industri Tahan Panas 300°C,https://i.ibb.co.com/fGXhDFCX/lem.jpg,,26000,,Aksesoris,Perekat Logam Kuat Seraguna Untuk Perbaikan Tangki Pipa Radiator BesiAluminium Baja Anti Bocor,,https://s.shopee.co.id/20vXuvtPbH,Active
+P005,Shock Sok Shockbreaker Belakang Fast Bikes Tabung Atas Model KTC YSS,https://i.ibb.co.com/0y3qvvc6/SHOCK.jpg,410000,299999,50,Aksesoris,"BARANG YG KAMI JUAL 100% BARU. 
+KAMI AKAN MENGECEK BARANG TERLEBIH DAHULU SEBELUM KIRIM.
+APABILA ADA TERJADI KERUSKAN DI PENGIRIMAN.
+BARANG BEBAS DI RETUR DENGAN BIAYA ONGKIR DI TANGGUNG PEMBELI.
+BARANG AKAN KAMI KIRIM 1X24 JAM.
+APA BILA LEWAT 24 JAM. MUNGKIN ADA KENDALA ( BARANG MESTI DI CARI DAHULU / HARI LIBUR )",,https://s.shopee.co.id/4LJShSiWfO,Active
+P006,Tutup Kipas + Spinner Full Cnc Beat Deluxe Scoopy Prestige Beat,https://i.ibb.co.com/dsfKgCK0/kipas.jpg,65000,44000,30,Aksesoris,"Promo Tutup Kipas + Spinner Import Full Cnc100%
+Tinggal Pasang Untuk Jenis Motor:
+-Beat/Scoopy KARBU
+-Beat/Scoopy FI2012-14(StaterKasar)
+-Beat/Scoopy ESP2016-19(StaterHalus)
+-Beat/Scoopy 2020-24(NEW)
+-Beat Deluxe
+-Scoopy Prestige
+-Genio",,https://s.shopee.co.id/3VkLiKu5mN,Active
+P007,Weister Workshirt Hitam Kemeja Pendek - Culture,https://i.ibb.co.com/6cF26bZV/kemeja.jpg,,139000,,Fashion,"Weister Work Shirt Black
+Tersedia variasi Sablon dan Full Bordir
+Condition : New
+Fabric : Drill Premium
+Color : Black",,https://s.shopee.co.id/AUu63K3fCo,Active
+P008,Kaos Matic Asik / Matic Gank / Baju Distro Matic Gank / Atasan Pria Wanita,https://i.ibb.co.com/zVJ49nLX/kaos-matic.jpg,,33000,,Fashion,"Weister Work Shirt Black
+Tersedia variasi Sablon dan Full Bordir
+Condition : New
+Fabric : Drill Premium
+Color : Black",,https://s.shopee.co.id/2VroWmloe5,Active
+P009,[ORIGINAL] HELM NJS KAIROZ FULLSET,https://i.ibb.co.com/1fGp0nMN/helm-njs.jpg,,600000,,Fashion,"Spesifikasi KAIROZ :
+a. Intercom Ready Design
+b. Single visor light smoke
+c. Berat kurang lebih 1400gr
+d. Sistem tali pengikat double D ring
+e. Support untuk pengendara berkacamata
+f. Interior menggunakan sistem knock down.",,https://s.shopee.co.id/5AsZhwUigS,Active
+P010,Ventela School All Black Original - Sepatu sekolah sneakers pria wanita,https://down-id.img.susercontent.com/file/id-11134207-8224r-mjvmzhscqbd2b0.webp,289900,187900,35,Fashion,"Garansi Tukar Size
+Gratis Ongkir Extra
+Cashback Extra lebih besar
+100% Original Ventela
+Live Shoping 24 Jam
+BNIB (brand new in the box) 100%",https://id.shp.ee/c9g86b64?fromSource=copy_link&smtt=0.0.9,https://s.shopee.co.id/1gIhrlCKvq,Active
+P011,SPION HONDA PCX VARIO 125 150 160 SPION BISA UNTUK SEMUA MOTOR,https://down-id.img.susercontent.com/file/id-11134207-7rasd-m5cgkuo1v34tcc@resize_w900_nl.webp,60000,29900,30,Aksesoris,"Fitur Utama
+- Presisi untuk PCX & Vario 125/150/160: dudukan pas, tidak mudah lepas, kokoh dan stabil saat berkendara.
+- Ukuran ringkas 35 x 10 x 5 cm: hemat ruang, tetap fungsional untuk cek kondisi belakang.
+- Sudah sepasang: kiri + kanan, praktis tanpa repot cari spare part.
+- Packing aman: dilapisi bubble wrap agar sampai dalam kondisi terbaik. ",https://id.shp.ee/ifl8ayvv?fromSource=copy_link&smtt=0.0.9,https://s.shopee.co.id/4fwJRKPPmk,Active
+
+SECTION,CATEGORIES
+Category Name
+Outfit
+Audio
+Aksesoris
+
+SECTION,SETTINGS
+Key,Value
+Website Name,IkbalAffiliate
+CEO Name,Ikbal Maulana
+Instagram Name,@1kbal_19
+Instagram URL,https://www.instagram.com/1kbal_19?igsi=Z3lxaTVhMWVha2Jo
+Intro Video URL,https://i.ibb.co.com/vxf7n9nd/Chat-GPT-Image-1-Sep-2026-20-06-01.png
+About Text,"IkbalAffiliate adalah platform rekomendasi gadget dan elektronik yang dikurasi langsung oleh Ikbal Maulana. Kami menguji, membandingkan, dan memilih produk terbaik dari berbagai marketplace resmi seperti Tokopedia, Shopee, dan TikTok Shop, lalu menyajikannya lengkap dengan ulasan singkat dan video demo."
+Affiliate Disclaimer,"Sebagian tautan pada situs ini adalah tautan affiliate. Jika kamu membeli produk melalui tautan tersebut, IkbalAffiliate dapat menerima komisi kecil tanpa biaya tambahan apa pun bagimu. Rekomendasi tetap didasarkan pada penilaian jujur terhadap kualitas produk."
+</script>
+
 <script>
 /* =====================================================================
    KONFIGURASI
+   Kosongkan CONFIG.CSV_URL untuk memakai data bawaan (script#embedded-csv).
+   Isi dengan link "Publish to web" (format CSV) dari Google Sheets kamu
+   supaya web mengambil data terbaru langsung dari spreadsheet setiap
+   kali halaman dibuka.
+   Cara mendapatkan link: Google Sheets > File > Share > Publish to web
+   > pilih tab data > format CSV > Publish > salin link (berakhiran
+   "output=csv").
    ===================================================================== */
 const CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbwxCWQD_8BNM51ne658suedajcmvI9-A21JaYno-yyW64WN0Jh2nry2pODkYRDJPCmTkw/exec'
+  CSV_URL: '' // contoh: 'https://docs.google.com/spreadsheets/d/e/XXXXX/pub?gid=0&single=true&output=csv'
 };
 
-const BRAND = {
-  websiteName: 'IkbalAffiliate',
-  ceoName: 'Ikbal Maulana'
-};
-
-/* =====================================================================
-   DATA DEMO
-   ===================================================================== */
-const DEMO_SETTINGS = {
-  'Instagram Name': '@1kbal_19',
-  'Instagram URL': 'https://instagram.com/1kbal_19',
-  'Poster Image URL': 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200',
-  'About Text': 'IkbalAffiliate adalah platform rekomendasi produk yang dikurasi langsung oleh Ikbal Maulana. Kami menguji, membandingkan, dan memilih produk terbaik dari berbagai marketplace resmi seperti Tokopedia, Shopee, dan TikTok Shop, lalu menyajikannya lengkap dengan ulasan singkat — supaya proses belanja kamu lebih cepat dan lebih yakin.',
-  'Affiliate Disclaimer': 'Sebagian tautan pada situs ini adalah tautan affiliate. Jika kamu membeli produk melalui tautan tersebut, IkbalAffiliate dapat menerima komisi kecil tanpa biaya tambahan apa pun bagimu. Rekomendasi tetap didasarkan pada penilaian jujur terhadap kualitas produk.'
-};
-const DEMO_CATEGORIES = ['Smartphone','Audio','Aksesoris','Smart Home','Laptop & PC'];
-const DEMO_PRODUCTS = [
-  {ProductID:'P001',ProductName:'EchoBuds Pro TWS',ImageURL:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',NormalPrice:599000,PromoPrice:349000,Discount:'',Category:'Audio',Description:'Earbuds TWS dengan Active Noise Cancelling, baterai 30 jam, dan mic jernih untuk kerja & meeting.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P002',ProductName:'Kamera Aksi UltraCam 4K',ImageURL:'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600',NormalPrice:1250000,PromoPrice:899000,Discount:'',Category:'Aksesoris',Description:'Kamera aksi tahan air 10m, rekam 4K/60fps, cocok untuk konten outdoor dan olahraga ekstrem.',VideoURL:'',AffiliateURL:'https://shopee.co.id',Status:'Active'},
-  {ProductID:'P003',ProductName:'Smartphone NovaX 12',ImageURL:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600',NormalPrice:3999000,PromoPrice:3399000,Discount:'',Category:'Smartphone',Description:'Layar AMOLED 120Hz, RAM 8GB, kamera utama 108MP, pengisian cepat 67W.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P004',ProductName:'Smart Plug WiFi 2-Pack',ImageURL:'https://images.unsplash.com/photo-1558002038-1055907df827?w=600',NormalPrice:189000,PromoPrice:129000,Discount:'',Category:'Smart Home',Description:'Kendalikan perangkat elektronik dari HP, kompatibel Google Home & Alexa, hemat listrik.',VideoURL:'',AffiliateURL:'https://www.tiktok.com/shop',Status:'Active'},
-  {ProductID:'P005',ProductName:'Laptop Sleeve ArmorCase 14"',ImageURL:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600',NormalPrice:220000,PromoPrice:159000,Discount:'',Category:'Aksesoris',Description:'Sarung laptop anti air dan anti benturan dengan lapisan busa ekstra, muat hingga charger.',VideoURL:'',AffiliateURL:'https://shopee.co.id',Status:'Active'},
-  {ProductID:'P006',ProductName:'Speaker Bluetooth BoomBox Mini',ImageURL:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600',NormalPrice:449000,PromoPrice:299000,Discount:'',Category:'Audio',Description:'Suara bass dalam, tahan percikan air IPX5, daya tahan baterai hingga 12 jam pemakaian.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P007',ProductName:'Mini PC WorkStation Lite',ImageURL:'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600',NormalPrice:4500000,PromoPrice:3990000,Discount:'',Category:'Laptop & PC',Description:'Mini PC hemat ruang untuk kerja kantoran dan multitasking ringan, sudah termasuk SSD 256GB.',VideoURL:'',AffiliateURL:'https://www.tokopedia.com',Status:'Active'},
-  {ProductID:'P008',ProductName:'Smartwatch PulseFit 2',ImageURL:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600',NormalPrice:799000,PromoPrice:549000,Discount:'',Category:'Aksesoris',Description:'Pelacak detak jantung, SpO2, dan tidur, layar AMOLED terang, tahan air untuk aktivitas harian.',VideoURL:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',AffiliateURL:'https://www.tiktok.com/shop',Status:'Active'}
-];
+const BRAND = { websiteName: 'IkbalAffiliate' };
 
 /* =====================================================================
    STATE
@@ -414,9 +611,15 @@ function isValidUrl(str){
   }
 }
 
+function parseNumber(str){
+  if(str === null || str === undefined) return null;
+  const digits = String(str).replace(/[^\d]/g, '');
+  return digits === '' ? null : Number(digits);
+}
+
 function formatRupiah(num){
   const n = Number(num);
-  if(isNaN(n)) return '-';
+  if(isNaN(n) || num === null) return '-';
   return 'Rp' + n.toLocaleString('id-ID');
 }
 
@@ -427,12 +630,77 @@ function escapeHtml(str){
 }
 
 function calcDiscount(p){
-  if(p.Discount && String(p.Discount).trim() !== '') return String(p.Discount).trim();
-  const normal = Number(p.NormalPrice), promo = Number(p.PromoPrice);
-  if(normal > 0 && promo > 0 && promo < normal){
-    return Math.round((1 - promo / normal) * 100) + '%';
+  if(p.Discount && String(p.Discount).trim() !== ''){
+    const d = String(p.Discount).trim();
+    return /%$/.test(d) ? d.replace('%','') : d;
+  }
+  const normal = parseNumber(p.NormalPrice), promo = parseNumber(p.PromoPrice);
+  if(normal && promo && promo < normal){
+    return String(Math.round((1 - promo / normal) * 100));
   }
   return '';
+}
+
+/* =====================================================================
+   PARSER CSV MULTI-SECTION
+   Sheet-nya berisi beberapa bagian (PRODUCTS di paling atas tanpa
+   penanda, lalu SECTION,CATEGORIES dan SECTION,SETTINGS). Fungsi ini
+   membaca semua bagian itu sekaligus dari satu file CSV.
+   ===================================================================== */
+function parseSheetCSV(csvText){
+  const rows = Papa.parse(csvText, { skipEmptyLines: false }).data;
+  const sections = { PRODUCTS: { header: null, rows: [] } };
+  let current = 'PRODUCTS';
+
+  rows.forEach(row => {
+    const isBlank = row.every(c => (c || '').toString().trim() === '');
+    if(isBlank) return;
+
+    if((row[0] || '').toString().trim().toUpperCase() === 'SECTION'){
+      current = (row[1] || '').toString().trim().toUpperCase() || 'UNKNOWN';
+      if(!sections[current]) sections[current] = { header: null, rows: [] };
+      return;
+    }
+
+    if(!sections[current]) sections[current] = { header: null, rows: [] };
+    if(!sections[current].header){
+      sections[current].header = row.map(c => (c || '').toString().trim());
+      return;
+    }
+    sections[current].rows.push(row);
+  });
+
+  const rowToObj = (header, row) => {
+    const obj = {};
+    header.forEach((h, i) => { if(h) obj[h] = row[i] !== undefined ? row[i] : ''; });
+    return obj;
+  };
+
+  const productsSection = sections.PRODUCTS || { header: [], rows: [] };
+  const products = productsSection.rows
+    .map(r => rowToObj(productsSection.header, r))
+    .filter(p => p.ProductName && String(p.ProductName).trim() !== '');
+
+  const categoriesSection = sections.CATEGORIES || { rows: [] };
+  const sheetCategories = categoriesSection.rows
+    .map(r => (r[0] || '').toString().trim())
+    .filter(Boolean);
+
+  // Gabungkan kategori dari SECTION,CATEGORIES dengan kategori yang benar-benar
+  // dipakai produk, supaya kategori seperti "Fashion" tetap muncul di filter
+  // walau belum didaftarkan manual di bagian CATEGORIES.
+  const catSet = new Set(sheetCategories);
+  products.forEach(p => { if(p.Category && p.Category.trim()) catSet.add(p.Category.trim()); });
+  const categories = Array.from(catSet);
+
+  const settingsSection = sections.SETTINGS || { rows: [] };
+  const settings = {};
+  settingsSection.rows.forEach(r => {
+    const key = (r[0] || '').toString().trim();
+    if(key) settings[key] = r[1] || '';
+  });
+
+  return { products, categories, settings };
 }
 
 /* =====================================================================
@@ -491,15 +759,19 @@ function renderErrorState(message){
     </div>`;
 }
 
-function renderProducts(){
-  const grid = document.getElementById('productGrid');
-  let list = ALL_PRODUCTS.filter(p => {
+function getVisibleProducts(){
+  return ALL_PRODUCTS.filter(p => {
     const isActive = !p.Status || String(p.Status).toLowerCase().includes('active') || String(p.Status).toLowerCase().includes('aktif');
     const inCategory = ACTIVE_CATEGORY === '__all' || p.Category === ACTIVE_CATEGORY;
     const q = SEARCH_QUERY.trim().toLowerCase();
     const matchSearch = !q || (p.ProductName || '').toLowerCase().includes(q) || (p.Description || '').toLowerCase().includes(q);
     return isActive && inCategory && matchSearch;
   });
+}
+
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  const list = getVisibleProducts();
 
   document.getElementById('resultCount').textContent = list.length + ' produk ditemukan';
 
@@ -518,28 +790,33 @@ function renderProducts(){
     const hasValidImage = isValidUrl(p.ImageURL);
     const imgSrc = hasValidImage ? p.ImageURL : 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600';
     const buyHref = isValidUrl(p.AffiliateURL) ? p.AffiliateURL : '#';
+    const pid = escapeHtml(p.ProductID || '');
     return `
-    <div class="card">
-      <div class="card-media">
+    <div class="card" data-id="${pid}">
+      <div class="card-media" data-open-detail="${pid}" tabindex="0" role="button" aria-label="Lihat detail ${escapeHtml(p.ProductName)}">
         <img src="${imgSrc}" alt="${escapeHtml(p.ProductName)}" loading="lazy">
         ${discount ? `<span class="badge-discount">-${escapeHtml(discount).replace('%','')}%</span>` : ''}
         ${p.Category ? `<span class="badge-category">${escapeHtml(p.Category)}</span>` : ''}
         ${hasVideo ? `<a class="video-thumb-btn" title="Tonton Video" href="${escapeHtml(p.VideoURL)}" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg>
         </a>` : ''}
+        <span class="quickview-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          Lihat Detail
+        </span>
       </div>
       <div class="card-body">
-        <h3>${escapeHtml(p.ProductName)}</h3>
+        <h3 data-open-detail="${pid}">${escapeHtml(p.ProductName)}</h3>
         <p class="card-desc">${escapeHtml(p.Description)}</p>
         <div class="price-row">
           <span class="price-promo">${formatRupiah(p.PromoPrice)}</span>
-          ${p.NormalPrice && Number(p.NormalPrice) > Number(p.PromoPrice) ? `<span class="price-normal">${formatRupiah(p.NormalPrice)}</span>` : ''}
+          ${p.NormalPrice && parseNumber(p.NormalPrice) > parseNumber(p.PromoPrice) ? `<span class="price-normal">${formatRupiah(p.NormalPrice)}</span>` : ''}
         </div>
         <div class="card-actions">
           ${buyHref !== '#'
             ? `<a class="btn btn-primary btn-sm btn-block" href="${buyHref}" target="_blank" rel="noopener nofollow sponsored">Beli Sekarang</a>`
             : `<button class="btn btn-primary btn-sm btn-block" disabled style="opacity:.5;cursor:not-allowed;">Link tidak tersedia</button>`}
-          ${hasVideo ? `<a class="btn btn-outline btn-sm" href="${escapeHtml(p.VideoURL)}" target="_blank" rel="noopener">Tonton Video</a>` : ''}
+          ${hasVideo ? `<a class="btn btn-outline btn-sm" href="${escapeHtml(p.VideoURL)}" target="_blank" rel="noopener">Video</a>` : ''}
         </div>
       </div>
     </div>`;
@@ -547,18 +824,108 @@ function renderProducts(){
 }
 
 /* =====================================================================
+   PRODUCT DETAIL MODAL
+   ===================================================================== */
+const modalEl = document.getElementById('productModal');
+
+function openProductModal(productId){
+  const p = ALL_PRODUCTS.find(x => String(x.ProductID) === String(productId));
+  if(!p) return;
+
+  const hasValidImage = isValidUrl(p.ImageURL);
+  const imgSrc = hasValidImage ? p.ImageURL : 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=900';
+  const discount = calcDiscount(p);
+  const hasVideo = isValidUrl(p.VideoURL);
+  const buyHref = isValidUrl(p.AffiliateURL) ? p.AffiliateURL : '#';
+
+  document.getElementById('modalImg').src = imgSrc;
+  document.getElementById('modalImg').alt = p.ProductName || '';
+  document.getElementById('modalTitle').textContent = p.ProductName || '';
+  document.getElementById('modalCategory').textContent = p.Category || 'Umum';
+  document.getElementById('modalDesc').textContent = p.Description || 'Belum ada deskripsi untuk produk ini.';
+  document.getElementById('modalPromo').textContent = formatRupiah(p.PromoPrice);
+  document.getElementById('modalIdLabel').textContent = p.ProductID ? ('Kode produk: ' + p.ProductID) : '';
+
+  const normalEl = document.getElementById('modalNormal');
+  if(p.NormalPrice && parseNumber(p.NormalPrice) > parseNumber(p.PromoPrice)){
+    normalEl.textContent = formatRupiah(p.NormalPrice);
+    normalEl.style.display = '';
+  }else{
+    normalEl.style.display = 'none';
+  }
+
+  const discEl = document.getElementById('modalDiscount');
+  if(discount){
+    discEl.textContent = '-' + String(discount).replace('%','') + '%';
+    discEl.style.display = '';
+  }else{
+    discEl.style.display = 'none';
+  }
+
+  const buyEl = document.getElementById('modalBuy');
+  if(buyHref !== '#'){
+    buyEl.href = buyHref;
+    buyEl.style.opacity = '';
+    buyEl.style.pointerEvents = '';
+    buyEl.textContent = 'Beli Sekarang';
+  }else{
+    buyEl.href = '#';
+    buyEl.style.opacity = '.5';
+    buyEl.style.pointerEvents = 'none';
+    buyEl.textContent = 'Link tidak tersedia';
+  }
+
+  const videoEl = document.getElementById('modalVideo');
+  if(hasVideo){
+    videoEl.href = p.VideoURL;
+    videoEl.style.display = '';
+  }else{
+    videoEl.style.display = 'none';
+  }
+
+  modalEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal(){
+  modalEl.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeProductModal);
+modalEl.addEventListener('click', (e) => { if(e.target === modalEl) closeProductModal(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeProductModal(); });
+
+document.getElementById('productGrid').addEventListener('click', (e) => {
+  const trigger = e.target.closest('[data-open-detail]');
+  if(trigger){
+    e.preventDefault();
+    openProductModal(trigger.dataset.openDetail);
+    return;
+  }
+});
+document.getElementById('productGrid').addEventListener('keydown', (e) => {
+  if((e.key === 'Enter' || e.key === ' ')){
+    const trigger = e.target.closest('[data-open-detail]');
+    if(trigger){ e.preventDefault(); openProductModal(trigger.dataset.openDetail); }
+  }
+});
+
+/* =====================================================================
    RENDER: SETTINGS
    ===================================================================== */
 function renderSettings(settings){
   document.getElementById('aboutText').textContent = settings['About Text'] || '-';
   document.getElementById('disclaimerText').textContent = settings['Affiliate Disclaimer'] || '-';
+  document.getElementById('ceoName').textContent = settings['CEO Name'] || 'Ikbal Maulana';
+  document.title = (settings['Website Name'] || BRAND.websiteName) + ' — Rekomendasi Produk Pilihan';
 
   const igName = settings['Instagram Name'] || '@1kbal_19';
   const igUrl = settings['Instagram URL'] || 'https://instagram.com/1kbal_19';
   document.getElementById('igLabel').textContent = igName;
   document.getElementById('igLink').href = isValidUrl(igUrl) ? igUrl : '#';
 
-  renderHeroPoster(settings['Poster Image URL'] || settings['Intro Video URL'] || DEMO_SETTINGS['Poster Image URL']);
+  renderHeroPoster(settings['Poster Image URL'] || settings['Intro Video URL']);
 }
 
 /* =====================================================================
@@ -572,47 +939,53 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 });
 
 /* =====================================================================
-   AMBIL DATA
+   AMBIL DATA (dari CSV_URL jika diisi, atau dari CSV bawaan)
    ===================================================================== */
+function applyParsedData(parsed){
+  ALL_PRODUCTS = parsed.products;
+  ALL_CATEGORIES = parsed.categories;
+
+  const activeCount = ALL_PRODUCTS.filter(p => !p.Status || String(p.Status).toLowerCase().includes('active') || String(p.Status).toLowerCase().includes('aktif')).length;
+  document.getElementById('statProduk').textContent = activeCount;
+  document.getElementById('statKategori').textContent = ALL_CATEGORIES.length;
+
+  renderSettings(parsed.settings || {});
+  renderCategoryChips(ALL_CATEGORIES);
+  renderProducts();
+}
+
 async function loadData(){
   renderSkeleton();
 
-  if(!CONFIG.API_URL){
-    ALL_PRODUCTS = DEMO_PRODUCTS;
-    ALL_CATEGORIES = DEMO_CATEGORIES;
-    document.getElementById('statProduk').textContent = ALL_PRODUCTS.length;
-    document.getElementById('statKategori').textContent = ALL_CATEGORIES.length;
-    renderSettings(DEMO_SETTINGS);
-    renderCategoryChips(ALL_CATEGORIES);
-    renderProducts();
+  const embeddedText = document.getElementById('embedded-csv').textContent;
+
+  if(!CONFIG.CSV_URL){
+    try{
+      applyParsedData(parseSheetCSV(embeddedText));
+    }catch(err){
+      console.error(err);
+      renderErrorState('Data bawaan gagal dibaca: ' + err.message);
+    }
     return;
   }
 
   try{
-    const res = await fetch(CONFIG.API_URL, {method:'GET'});
+    const res = await fetch(CONFIG.CSV_URL, { cache: 'no-store' });
     if(!res.ok) throw new Error('Server merespons dengan status ' + res.status);
-    const json = await res.json();
-    if(!json || json.success === false) throw new Error(json && json.message ? json.message : 'Format data tidak dikenali');
-
-    const data = json.data || json;
-    ALL_PRODUCTS = Array.isArray(data.products) ? data.products : [];
-    ALL_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
-    const settings = data.settings || {};
-
-    document.getElementById('statProduk').textContent = ALL_PRODUCTS.length;
-    document.getElementById('statKategori').textContent = ALL_CATEGORIES.length;
-
-    renderSettings(settings);
-    renderCategoryChips(ALL_CATEGORIES);
-    renderProducts();
+    const csvText = await res.text();
+    applyParsedData(parseSheetCSV(csvText));
   }catch(err){
-    console.error(err);
-    renderErrorState('Tidak dapat mengambil data dari Google Sheets. Periksa kembali CONFIG.API_URL dan pastikan Apps Script sudah di-deploy sebagai "Anyone can access". Detail: ' + err.message);
+    console.warn('Gagal mengambil CSV_URL, memakai data bawaan sebagai cadangan.', err);
+    try{
+      applyParsedData(parseSheetCSV(embeddedText));
+    }catch(err2){
+      console.error(err2);
+      renderErrorState('Tidak dapat mengambil data dari CONFIG.CSV_URL maupun data bawaan. Detail: ' + err.message);
+    }
   }
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();
-document.title = BRAND.websiteName + ' — Rekomendasi Produk Pilihan';
 loadData();
 </script>
 </body>
